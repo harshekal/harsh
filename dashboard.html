@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FIR Section Suggestion System</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">FIR</div>
+      <div>
+        <h1>FIR Section Suggestion System</h1>
+        <p>Incident review dashboard</p>
+      </div>
+    </div>
+    <div class="topbar-actions"><span class="demo-badge">Academic Demo</span><span id="signedInUser" class="signed-in-user"></span><button type="button" id="logoutButton" class="btn btn-light logout-button">Log out</button></div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div>
+        <p class="eyebrow">CASE ASSISTANCE</p>
+        <h2>Analyze an incident</h2>
+        <p>Enter the reported facts to generate preliminary, rule-based prompts for officer review.</p>
+      </div>
+      <div class="hero-icon" aria-hidden="true">⌕</div>
+    </section>
+
+    <div class="notice">
+      <strong>Important:</strong> This demo uses sample keyword rules, not a verified legal database.
+      It does not determine guilt, register an FIR, or provide final legal advice. Verify all facts and
+      legal provisions against official sources. Avoid entering confidential real case information.
+    </div>
+
+    <div class="dashboard-grid">
+      <section class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">NEW RECORD</p>
+            <h2>Incident details</h2>
+          </div>
+          <span class="step-number">01</span>
+        </div>
+
+        <form id="incidentForm">
+          <div class="form-grid">
+            <div class="field">
+              <label for="caseId">Case reference <span class="optional">(optional)</span></label>
+              <input id="caseId" name="caseId" placeholder="e.g. CASE-001">
+            </div>
+            <div class="field">
+              <label for="incidentDate">Incident date *</label>
+              <input type="date" id="incidentDate" name="incidentDate" required>
+            </div>
+            <div class="field">
+              <label for="location">Incident location *</label>
+              <input id="location" name="location" placeholder="Enter location" required>
+            </div>
+            <div class="field">
+              <label for="category">Incident category *</label>
+              <select id="category" name="category" required>
+                <option value="">Select a category</option>
+                <option value="theft">Theft</option>
+                <option value="assault">Assault / physical harm</option>
+                <option value="cheating">Cheating / deception</option>
+                <option value="robbery">Robbery</option>
+                <option value="threat">Criminal intimidation / threat</option>
+                <option value="trespass">Trespassing</option>
+                <option value="damage">Property damage</option>
+                <option value="other">Other / uncertain</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="weapon">Weapon reported?</label>
+              <select id="weapon" name="weapon">
+                <option value="unknown">Unknown</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="threats">Threats reported?</label>
+              <select id="threats" name="threats">
+                <option value="unknown">Unknown</option>
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+            </div>
+            <div class="field full">
+              <label for="description">Incident description *</label>
+              <textarea id="description" name="description" minlength="10" required
+                placeholder="Describe the reported facts clearly. Avoid assumptions or conclusions."></textarea>
+              <span class="hint">Minimum 10 characters. Suggestions are based on category and keyword matches.</span>
+            </div>
+            <div class="field full">
+              <label for="injury">Injury / property details <span class="optional">(optional)</span></label>
+              <input id="injury" name="injury" placeholder="Briefly note any reported injury or property involved">
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-primary" type="submit">Analyze incident <span aria-hidden="true">→</span></button>
+            <button class="btn btn-light" type="reset">Clear form</button>
+          </div>
+          <p id="status" class="status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <aside class="side-column">
+        <section class="panel quick-stats">
+          <p class="eyebrow">LOCAL SESSION</p>
+          <h2>Case overview</h2>
+          <div class="stats-grid">
+            <div class="stat">
+              <span id="totalCases">0</span>
+              <small>Saved cases</small>
+            </div>
+            <div class="stat">
+              <span id="reviewCount">0</span>
+              <small>Marked for review</small>
+            </div>
+          </div>
+          <p class="hint">Saved records stay in this browser only using local storage. Do not use real confidential data.</p>
+        </section>
+
+        <section class="panel tips">
+          <p class="eyebrow">WORKFLOW</p>
+          <h2>How it works</h2>
+          <ol>
+            <li>Enter the incident details.</li>
+            <li>Review the preliminary prompts.</li>
+            <li>Mark relevant prompts for manual review.</li>
+            <li>Save the demo record or print a report.</li>
+          </ol>
+        </section>
+      </aside>
+    </div>
+
+    <section class="panel results-panel" id="resultsSection">
+      <div class="panel-heading results-heading">
+        <div>
+          <p class="eyebrow">ANALYSIS OUTPUT</p>
+          <h2>Suggested review prompts</h2>
+        </div>
+        <span id="resultCount" class="count-pill">No analysis yet</span>
+      </div>
+      <div id="summary" class="empty-state">
+        <div class="empty-icon">⌕</div>
+        <h3>Ready to analyze</h3>
+        <p>Complete the form and select <strong>Analyze incident</strong>. Results will appear here.</p>
+      </div>
+      <div id="results"></div>
+      <div class="results-actions" id="resultsActions" hidden>
+        <button class="btn btn-primary" type="button" id="saveButton">Save case locally</button>
+        <button class="btn btn-light" type="button" id="printButton">Print report</button>
+      </div>
+    </section>
+
+    <section class="panel saved-panel">
+      <div class="panel-heading">
+        <div>
+          <p class="eyebrow">BROWSER STORAGE</p>
+          <h2>Saved demo cases</h2>
+        </div>
+        <button id="clearSavedButton" class="btn btn-danger-outline" type="button">Clear saved cases</button>
+      </div>
+      <div class="saved-toolbar">
+        <input id="searchSaved" type="search" placeholder="Search by case ID, category, or location">
+        <select id="filterSaved" aria-label="Filter saved cases">
+          <option value="all">All categories</option>
+          <option value="theft">Theft</option>
+          <option value="assault">Assault</option>
+          <option value="cheating">Cheating</option>
+          <option value="robbery">Robbery</option>
+          <option value="threat">Threat</option>
+          <option value="trespass">Trespassing</option>
+          <option value="damage">Property damage</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div id="savedCases" class="saved-cases">
+        <p class="empty-state compact">No saved demo cases yet.</p>
+      </div>
+    </section>
+
+    <footer>
+      FIR Section Suggestion System · Frontend-only academic demo · No automatic FIR registration
+    </footer>
+  </main>
+
+  <script src="dashboard.js"></script>
+  <script>
+    (function () {
+      const raw = localStorage.getItem("firCurrentUser");
+      if (!raw) { window.location.replace("index.html"); return; }
+      try { const user = JSON.parse(raw); document.getElementById("signedInUser").textContent = user.name ? "Signed in: " + user.name : ""; }
+      catch { localStorage.removeItem("firCurrentUser"); window.location.replace("index.html"); }
+      document.getElementById("logoutButton").addEventListener("click", function () { localStorage.removeItem("firCurrentUser"); window.location.replace("index.html"); });
+    })();
+  </script>
+</body>
+</html>
