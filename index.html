@@ -12,10 +12,10 @@
       <div class="logo">FIR</div>
       <p class="eyebrow">CASE ASSISTANCE PORTAL</p>
       <h1>FIR Section<br><span>Suggestion System</span></h1>
-      <p class="intro-text">Sign in to continue to the incident review dashboard, or create a demo account to explore the interface.</p>
+      <p class="intro-text">Sign in to your incident records. Police administrators use the same sign-in page.</p>
       <div class="intro-note">
         <span class="note-icon">i</span>
-        <p>Academic demonstration only. This frontend does not provide secure real-world authentication or store accounts on a server.</p>
+        <p>Citizen records are private to their account and authorized police administrators. Use test data only in this academic project.</p>
       </div>
     </section>
 
@@ -34,7 +34,7 @@
         <input type="email" id="loginEmail" placeholder="name@example.com" autocomplete="username" required>
         <label for="loginPassword">Password</label>
         <div class="password-wrap">
-          <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required minlength="8">
+          <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required maxlength="128">
           <button type="button" class="show-password" data-target="loginPassword">Show</button>
         </div>
         <div class="form-options">
@@ -49,26 +49,19 @@
       <form id="registerForm" class="auth-form" hidden>
         <div class="form-heading">
           <h2>Create your account</h2>
-          <p>Fill in the details below to register a demo account.</p>
+          <p>Register as a citizen. Police access is issued separately by the portal operator.</p>
         </div>
         <label for="fullName">Full name</label>
-        <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name" required minlength="2">
+        <input type="text" id="fullName" placeholder="Enter your full name" autocomplete="name" required minlength="2" maxlength="100">
         <label for="registerEmail">Email address</label>
         <input type="email" id="registerEmail" placeholder="name@example.com" autocomplete="email" required>
-        <label for="registerRole">Role</label>
-        <select id="registerRole" required>
-          <option value="">Select your role</option>
-          <option value="Officer">Officer (demo)</option>
-          <option value="Administrator">Administrator (demo)</option>
-          <option value="Student">Student / Project evaluator</option>
-        </select>
         <label for="registerPassword">Password</label>
         <div class="password-wrap">
-          <input type="password" id="registerPassword" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required>
+          <input type="password" id="registerPassword" placeholder="At least 12 characters" autocomplete="new-password" minlength="12" maxlength="128" required>
           <button type="button" class="show-password" data-target="registerPassword">Show</button>
         </div>
         <label for="confirmPassword">Confirm password</label>
-        <input type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" minlength="8" required>
+        <input type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password" minlength="12" maxlength="128" required>
         <label class="check-label terms"><input type="checkbox" id="agreeTerms" required> I understand this is an academic demo and not a secure production system.</label>
         <button type="submit" class="submit-button">Create account <span>→</span></button>
         <p id="registerMessage" class="message" role="status" aria-live="polite"></p>
@@ -77,6 +70,7 @@
       <div class="card-footer"><span class="lock">⌑</span> Demo interface · Do not use real confidential case data</div>
     </section>
   </main>
+  <script src="api.js"></script>
   <script src="auth.js"></script>
 </body>
 </html>

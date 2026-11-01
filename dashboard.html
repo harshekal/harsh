@@ -18,11 +18,12 @@
     <div class="topbar-actions"><span class="demo-badge">Academic Demo</span><span id="signedInUser" class="signed-in-user"></span><button type="button" id="logoutButton" class="btn btn-light logout-button">Log out</button></div>
   </header>
 
-  <main class="container">
+  <p id="pageMessage" class="page-message" role="alert"></p>
+  <main class="container" id="dashboardContent" hidden>
     <section class="hero">
       <div>
         <p class="eyebrow">CASE ASSISTANCE</p>
-        <h2>Analyze an incident</h2>
+        <h2 id="dashboardTitle">My incident records</h2>
         <p>Enter the reported facts to generate preliminary, rule-based prompts for officer review.</p>
       </div>
       <div class="hero-icon" aria-hidden="true">⌕</div>
@@ -48,7 +49,7 @@
           <div class="form-grid">
             <div class="field">
               <label for="caseId">Case reference <span class="optional">(optional)</span></label>
-              <input id="caseId" name="caseId" placeholder="e.g. CASE-001">
+              <input id="caseId" name="caseId" placeholder="e.g. CASE-001" maxlength="100">
             </div>
             <div class="field">
               <label for="incidentDate">Incident date *</label>
@@ -56,7 +57,7 @@
             </div>
             <div class="field">
               <label for="location">Incident location *</label>
-              <input id="location" name="location" placeholder="Enter location" required>
+              <input id="location" name="location" placeholder="Enter location" minlength="2" maxlength="300" required>
             </div>
             <div class="field">
               <label for="category">Incident category *</label>
@@ -90,13 +91,13 @@
             </div>
             <div class="field full">
               <label for="description">Incident description *</label>
-              <textarea id="description" name="description" minlength="10" required
+              <textarea id="description" name="description" minlength="10" maxlength="10000" required
                 placeholder="Describe the reported facts clearly. Avoid assumptions or conclusions."></textarea>
               <span class="hint">Minimum 10 characters. Suggestions are based on category and keyword matches.</span>
             </div>
             <div class="field full">
               <label for="injury">Injury / property details <span class="optional">(optional)</span></label>
-              <input id="injury" name="injury" placeholder="Briefly note any reported injury or property involved">
+              <input id="injury" name="injury" placeholder="Briefly note any reported injury or property involved" maxlength="2000">
             </div>
           </div>
           <div class="button-row">
@@ -109,7 +110,7 @@
 
       <aside class="side-column">
         <section class="panel quick-stats">
-          <p class="eyebrow">LOCAL SESSION</p>
+          <p class="eyebrow">ACCOUNT RECORDS</p>
           <h2>Case overview</h2>
           <div class="stats-grid">
             <div class="stat">
@@ -121,7 +122,7 @@
               <small>Marked for review</small>
             </div>
           </div>
-          <p class="hint">Saved records stay in this browser only using local storage. Do not use real confidential data.</p>
+          <p class="hint">Restricted to the reporting account and authorized police administrators.</p>
         </section>
 
         <section class="panel tips">
@@ -130,8 +131,8 @@
           <ol>
             <li>Enter the incident details.</li>
             <li>Review the preliminary prompts.</li>
-            <li>Mark relevant prompts for manual review.</li>
-            <li>Save the demo record or print a report.</li>
+            <li>Police administrators record their review.</li>
+            <li>Save the record or print a report.</li>
           </ol>
         </section>
       </aside>
@@ -152,7 +153,15 @@
       </div>
       <div id="results"></div>
       <div class="results-actions" id="resultsActions" hidden>
-        <button class="btn btn-primary" type="button" id="saveButton">Save case locally</button>
+        <div id="policeReviewControls" class="field" hidden>
+          <label for="caseStatus">Police case status</label>
+          <select id="caseStatus">
+            <option value="submitted">Submitted</option>
+            <option value="under_review">Under police review</option>
+            <option value="closed">Closed</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="button" id="saveButton">Save case</button>
         <button class="btn btn-light" type="button" id="printButton">Print report</button>
       </div>
     </section>
@@ -160,13 +169,12 @@
     <section class="panel saved-panel">
       <div class="panel-heading">
         <div>
-          <p class="eyebrow">BROWSER STORAGE</p>
-          <h2>Saved demo cases</h2>
+          <p class="eyebrow">CASE RECORDS</p>
+          <h2 id="savedHeading">My saved cases</h2>
         </div>
-        <button id="clearSavedButton" class="btn btn-danger-outline" type="button">Clear saved cases</button>
       </div>
       <div class="saved-toolbar">
-        <input id="searchSaved" type="search" placeholder="Search by case ID, category, or location">
+        <input id="searchSaved" type="search" aria-label="Search saved cases" placeholder="Search by case ID, category, or location">
         <select id="filterSaved" aria-label="Filter saved cases">
           <option value="all">All categories</option>
           <option value="theft">Theft</option>
@@ -180,24 +188,16 @@
         </select>
       </div>
       <div id="savedCases" class="saved-cases">
-        <p class="empty-state compact">No saved demo cases yet.</p>
+        <p class="empty-state compact">No saved cases yet.</p>
       </div>
     </section>
 
     <footer>
-      FIR Section Suggestion System · Frontend-only academic demo · No automatic FIR registration
+      FIR Section Suggestion System · Academic project · No automatic FIR registration
     </footer>
   </main>
 
+  <script src="api.js"></script>
   <script src="dashboard.js"></script>
-  <script>
-    (function () {
-      const raw = localStorage.getItem("firCurrentUser");
-      if (!raw) { window.location.replace("index.html"); return; }
-      try { const user = JSON.parse(raw); document.getElementById("signedInUser").textContent = user.name ? "Signed in: " + user.name : ""; }
-      catch { localStorage.removeItem("firCurrentUser"); window.location.replace("index.html"); }
-      document.getElementById("logoutButton").addEventListener("click", function () { localStorage.removeItem("firCurrentUser"); window.location.replace("index.html"); });
-    })();
-  </script>
 </body>
 </html>

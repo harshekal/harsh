@@ -1,0 +1,12 @@
+{
+  "name": "fir-case-portal",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.5.0" },
+  "scripts": {
+    "start": "node server.js",
+    "create-admin": "node create-admin.js",
+    "test": "node --test tests/*.test.js"
+  }
+}

@@ -166,6 +166,13 @@ footer { text-align: center; color: var(--muted); font-size: .8rem; padding: 26p
 
 /* Connected login/session controls */
 .topbar-actions { display:flex; align-items:center; justify-content:flex-end; gap:12px; flex-wrap:wrap; }
-.signed-in-user { color:var(--muted, #64748b); font-size:0.88rem; }
+.signed-in-user { color:#e5eff8; font-size:0.88rem; overflow-wrap:anywhere; }
 .logout-button { cursor:pointer; white-space:nowrap; }
-@media (max-width: 700px) { .topbar-actions { width:100%; justify-content:flex-start; } }
+.page-message { margin:0; padding:0 20px; color:#a23e3e; }
+.page-message:not(:empty) { padding:16px 20px; }
+.result-card p, .saved-case h3, .saved-case p { overflow-wrap:anywhere; }
+.results-actions { align-items:flex-end; }
+button:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+input:disabled, select:disabled, textarea:disabled, input[readonly] { background:#f3f6fa; }
+@media (max-width: 700px) { .topbar { flex-wrap:wrap; } .topbar-actions { width:100%; justify-content:flex-start; } }
+@media print { .topbar-actions, .page-message, .dashboard-grid { display:none !important; } }
